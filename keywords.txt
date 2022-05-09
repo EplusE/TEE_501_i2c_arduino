@@ -1,0 +1,35 @@
+#######################################
+# Syntax Coloring Map For TEE501_i2c
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+tee501I2c	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+singleShotTemp				KEYWORD2
+singleShotTempClockStretchingDisabled	KEYWORD2
+getPeriodicMeasurmentTemp		KEYWORD2
+findSensor				KEYWORD2
+changePeriodicMeasurmentTime		KEYWORD2
+readPeriodicMeasurmentTime		KEYWORD2
+changeMeasurmentResolution		KEYWORD2
+readMeasurmentResolution		KEYWORD2
+startPeriodicMeasurment			KEYWORD2
+endPeriodicMeasurment			KEYWORD2
+readIdentification			KEYWORD2
+newMeasurmentReady			KEYWORD2
+clearStatusregister1			KEYWORD2
+reset					KEYWORD2
+getErrorString				KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+CRC8_ONEWIRE_POLY	LITERAL1
+CRC8_ONEWIRE_START	LITERAL1
