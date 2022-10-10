@@ -14,16 +14,16 @@ tee501I2c	KEYWORD1
 
 singleShotTemp				KEYWORD2
 singleShotTempClockStretchingDisabled	KEYWORD2
-getPeriodicMeasurmentTemp		KEYWORD2
+getPeriodicMeasurementTemp		KEYWORD2
 findSensor				KEYWORD2
-changePeriodicMeasurmentTime		KEYWORD2
-readPeriodicMeasurmentTime		KEYWORD2
-changeMeasurmentResolution		KEYWORD2
-readMeasurmentResolution		KEYWORD2
-startPeriodicMeasurment			KEYWORD2
-endPeriodicMeasurment			KEYWORD2
+changePeriodicMeasurementTime		KEYWORD2
+readPeriodicMeasurementTime		KEYWORD2
+changeMeasurementResolution		KEYWORD2
+readMeasurementResolution		KEYWORD2
+startPeriodicMeasurement		KEYWORD2
+endPeriodicMeasurement			KEYWORD2
 readIdentification			KEYWORD2
-newMeasurmentReady			KEYWORD2
+newMeasurementReady			KEYWORD2
 clearStatusregister1			KEYWORD2
 reset					KEYWORD2
 getErrorString				KEYWORD2

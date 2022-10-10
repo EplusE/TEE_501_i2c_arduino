@@ -60,7 +60,15 @@ uint8_t tee501I2c::singleShotTemp(float &temperature)
   wireRead(i2cResponse, 6);
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
   {
-    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]) / 100;
+    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]);
+    if (temperature > 55536)
+    {
+      temperature = (temperature - 65536) / 100; 
+    }
+    else 
+    {
+      temperature = temperature / 100;
+    }
 	  return 0;
   }
   else
@@ -77,7 +85,15 @@ uint8_t tee501I2c::singleShotTempClockStretchingDisabled(float &temperature)
   wireRead(i2cResponse, 6);
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
   {
-    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]) / 100;
+    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]);
+    if (temperature > 55536)
+    {
+      temperature = (temperature - 65536) / 100; 
+    }
+    else 
+    {
+      temperature = temperature / 100;
+    }
 	  return 0;
   }
   else
@@ -86,7 +102,7 @@ uint8_t tee501I2c::singleShotTempClockStretchingDisabled(float &temperature)
   }
 }
 
-uint8_t tee501I2c::getPeriodicMeasurmentTemp(float &temperature)
+uint8_t tee501I2c::getPeriodicMeasurementTemp(float &temperature)
 {
   unsigned char i2cResponse[6]; 
   unsigned char Command[] = {0xE0,0x00};
@@ -94,7 +110,15 @@ uint8_t tee501I2c::getPeriodicMeasurmentTemp(float &temperature)
   wireRead(i2cResponse, 6); 
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
   {
-    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]) / 100;
+    temperature = ((float)(i2cResponse[0]) * 256 + i2cResponse[1]);
+    if (temperature > 55536)
+    {
+      temperature = (temperature - 65536) / 100; 
+    }
+    else 
+    {
+      temperature = temperature / 100;
+    }
 	  return 0;
   }
   else
@@ -134,7 +158,7 @@ uint8_t tee501I2c::findSensor(void)
 }
 
 
-uint8_t tee501I2c::changePeriodicMeasurmentTime(uint32_t millisec)
+uint8_t tee501I2c::changePeriodicMeasurementTime(uint32_t millisec)
 {
   unsigned char sendBytes[2];
   if(3276751 > millisec)  
@@ -155,18 +179,18 @@ uint8_t tee501I2c::changePeriodicMeasurmentTime(uint32_t millisec)
 }
 
 
-void tee501I2c::readPeriodicMeasurmentTime(float &periodicMeasurmentTime)
+void tee501I2c::readPeriodicMeasurementTime(float &periodicMeasurementTime)
 {
   unsigned char i2cResponse[3];
   unsigned char Command[] = {0x72,0xA7,0x10};
   wireWrite(Command, 2, false);
   wireRead(i2cResponse, 3);
   float value = i2cResponse[1] * 256 + i2cResponse[0];
-  periodicMeasurmentTime = value * 0.05;
+  periodicMeasurementTime = value * 0.05;
 }
 
 
-uint8_t tee501I2c::changeMeasurmentResolution(int measResTemp) 		//8 - 14 Bit
+uint8_t tee501I2c::changeMeasurementResolution(int measResTemp) 		//8 - 14 Bit
 {
   if(8 <= measResTemp <= 14)
   {
@@ -183,7 +207,7 @@ uint8_t tee501I2c::changeMeasurmentResolution(int measResTemp) 		//8 - 14 Bit
 }
 
 
-void tee501I2c::readMeasurmentResolution(int &measResTemp)
+void tee501I2c::readMeasurementResolution(int &measResTemp)
 {
   unsigned char i2cResponse[1];
   unsigned char Command[] = {0x72,0xA7,0x0F};
@@ -195,14 +219,14 @@ void tee501I2c::readMeasurmentResolution(int &measResTemp)
 }
 
 
-void tee501I2c::startPeriodicMeasurment(void)
+void tee501I2c::startPeriodicMeasurement(void)
 {
   unsigned char Command[] = {0x20,0x1E};
   wireWrite(Command, 1, true);
 }
 
 
-void tee501I2c::endPeriodicMeasurment(void)
+void tee501I2c::endPeriodicMeasurement(void)
 {
   unsigned char Command[] = {0x30,0x93};
   wireWrite(Command, 1, true);
@@ -237,7 +261,7 @@ void tee501I2c::reset(void)
 }
 
 
-uint8_t tee501I2c::newMeasurmentReady(bool &measurement)
+uint8_t tee501I2c::newMeasurementReady(bool &measurement)
 {
   unsigned char i2cResponse [3];
   unsigned char Command[] = {0xF3,0x52};
@@ -332,7 +356,7 @@ void tee501I2c::getErrorString(uint8_t Status, char errorString[])
     strcpy(errorString,"The Milliseconds are not in the specification");
     break;
   case MEAS_RES_WRONG: 
-    strcpy(errorString,"The Measurment Resolution are not in the specification 8-13 Bit");
+    strcpy(errorString,"The Measurement Resolution are not in the specification 8-13 Bit");
     break;
   default:
     strcpy(errorString,"unknown error");

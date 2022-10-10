@@ -30,7 +30,6 @@ float temperature = 0;
 unsigned char identification[8];
 char errorString[200];
 uint8_t errorcode; 
-int res=0;
 
 void setup() 
 {
@@ -49,15 +48,13 @@ void setup()
     Serial.print("Identificationnumber: ");
     for(int i = 0; i < 8; i++)
     {
+      Serial.print(identification[i] < 16 ? "0" : "");
       Serial.print(identification[i],HEX);
     }
   }
   Serial.println("");
   Serial.println("temperature"); 
-  delay(1000);
-  tee.readMeasurmentResolution(res);
-  Serial.println(res);
-  
+  delay(1000);  
 }
 
 void loop() 
@@ -73,7 +70,5 @@ void loop()
     Serial.print(temperature);
     Serial.println(" °C");
   }
-   tee.readMeasurmentResolution(res);
-  Serial.println(res);
   delay(REQUEST_INTERVAL_MS);
 }

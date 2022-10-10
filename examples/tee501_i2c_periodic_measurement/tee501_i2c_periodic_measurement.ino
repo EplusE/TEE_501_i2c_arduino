@@ -28,8 +28,8 @@ tee501I2c tee(0x48);
 #define CSV_DELIMITER             ','
 
 
-bool measurmentReady;
-float temperature, measurmentTime;
+bool measurementReady;
+float temperature, measurementTime;
 unsigned char identification[8];
 char errorString[200];
 uint8_t errorcode; 
@@ -41,7 +41,7 @@ void setup() {
   delay(1000);
   tee.getErrorString(tee.findSensor(), errorString);
   Serial.println(errorString);
-  errorcode = tee.changePeriodicMeasurmentTime(2000);  // in ms 
+  errorcode = tee.changePeriodicMeasurementTime(2000);  // in ms 
   if(errorcode != 0)
   {
     tee.getErrorString(errorcode,errorString);
@@ -51,9 +51,9 @@ void setup() {
   {
 	Serial.println("Changing the periodic measurement time was successful");  
   }
-  tee.readPeriodicMeasurmentTime(measurmentTime);
-  Serial.print("periodic measurment time is: ");
-  Serial.print(measurmentTime);
+  tee.readPeriodicMeasurementTime(measurementTime);
+  Serial.print("periodic measurement time is: ");
+  Serial.print(measurementTime);
   Serial.println(" s");
   errorcode = tee.readIdentification(identification);
   if(errorcode != 0)
@@ -66,11 +66,12 @@ void setup() {
     Serial.print("Identificationnumber: ");
     for(int i = 0; i < 8; i++)
     {
+      Serial.print(identification[i] < 16 ? "0" : "");
       Serial.print(identification[i],HEX);
     }
   }
   Serial.println("");
-  tee.startPeriodicMeasurment();
+  tee.startPeriodicMeasurement();
   delay(2000); 
   Serial.println("temperature"); 
   delay(1000);
@@ -79,16 +80,16 @@ void setup() {
 
 void loop() 
 { 
-  errorcode = tee.newMeasurmentReady(measurmentReady);
+  errorcode = tee.newMeasurementReady(measurementReady);
   if(errorcode != 0)
   {
     
   }
   else
   {
-    if(measurmentReady)
+    if(measurementReady)
     {
-	  errorcode = tee.getPeriodicMeasurmentTemp(temperature);
+	  errorcode = tee.getPeriodicMeasurementTemp(temperature);
 	  if(errorcode != 0)
       {
         tee.getErrorString(errorcode,errorString);
