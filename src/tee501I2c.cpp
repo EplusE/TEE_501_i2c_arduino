@@ -54,8 +54,8 @@ tee501I2c::tee501I2c(unsigned char i2cAdress)
 
 uint8_t tee501I2c::singleShotTemp(float &temperature)
 {
-  unsigned char i2cResponse[6];
-  unsigned char Command[] = {0x2C,0x1B};
+  unsigned char i2cResponse[6] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_SINGLE_SHOT >> 8), (TEE501_COMMAND_READ_SINGLE_SHOT & 0xFF)};
   wireWrite(Command, 1, true);
   wireRead(i2cResponse, 6);
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
@@ -79,8 +79,8 @@ uint8_t tee501I2c::singleShotTemp(float &temperature)
 
 uint8_t tee501I2c::singleShotTempClockStretchingDisabled(float &temperature)
 {
-  unsigned char i2cResponse[6];
-  unsigned char Command[] = {0x24,0x1D};
+  unsigned char i2cResponse[6] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_SINGLE_SHOT_WITHOUT_CLOCK_STRETCHING >> 8), (TEE501_COMMAND_READ_SINGLE_SHOT_WITHOUT_CLOCK_STRETCHING & 0xFF)};
   wireWrite(Command, 1, true);
   wireRead(i2cResponse, 6);
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
@@ -104,8 +104,8 @@ uint8_t tee501I2c::singleShotTempClockStretchingDisabled(float &temperature)
 
 uint8_t tee501I2c::getPeriodicMeasurementTemp(float &temperature)
 {
-  unsigned char i2cResponse[6]; 
-  unsigned char Command[] = {0xE0,0x00};
+  unsigned char i2cResponse[6] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_PERIODIC_MEASUREMENT >> 8),(TEE501_COMMAND_READ_PERIODIC_MEASUREMENT & 0xFF)};
   wireWrite(Command, 1, false);
   wireRead(i2cResponse, 6); 
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
@@ -167,7 +167,7 @@ uint8_t tee501I2c::changePeriodicMeasurementTime(uint32_t millisec)
 	sendBytes[1] = value / 255;
 	sendBytes[0] = value % 256;
 	unsigned char crc8[] = {0x10, sendBytes[0], sendBytes[1]};
-	unsigned char Command[] = {0x72,0xA7,0x10,sendBytes[0],sendBytes[1],calcCrc8(crc8,0,2)};
+	unsigned char Command[] = {(TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS >> 8), (TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS & 0xFF), TEE501_REGISTER_PERIODIC_MEASUREMENT_TIME,sendBytes[0],sendBytes[1],calcCrc8(crc8,0,2)};
 	wireWrite(Command, 5, true);
 	return 0;
   }
@@ -181,8 +181,8 @@ uint8_t tee501I2c::changePeriodicMeasurementTime(uint32_t millisec)
 
 void tee501I2c::readPeriodicMeasurementTime(float &periodicMeasurementTime)
 {
-  unsigned char i2cResponse[3];
-  unsigned char Command[] = {0x72,0xA7,0x10};
+  unsigned char i2cResponse[3] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS >> 8), (TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS & 0xFF), TEE501_REGISTER_PERIODIC_MEASUREMENT_TIME};
   wireWrite(Command, 2, false);
   wireRead(i2cResponse, 3);
   float value = i2cResponse[1] * 256 + i2cResponse[0];
@@ -192,11 +192,11 @@ void tee501I2c::readPeriodicMeasurementTime(float &periodicMeasurementTime)
 
 uint8_t tee501I2c::changeMeasurementResolution(int measResTemp) 		//8 - 14 Bit
 {
-  if(8 <= measResTemp <= 14)
+  if(8 <= measResTemp && measResTemp <= 14)
   {
 	unsigned char sendByte = (measResTemp - 8);
 	unsigned char crc8[] = {0x0F, sendByte};
-	unsigned char Command[] = {0x72,0xA7,0x0F,sendByte,calcCrc8(crc8,0,1)};
+	unsigned char Command[] = {(TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS >> 8), (TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS & 0xFF), TEE501_REGISTER_MEASUREMENT_RESOLUTION,sendByte,calcCrc8(crc8,0,1)};
 	wireWrite(Command, 4, true);
 	return 0;
   }
@@ -209,8 +209,8 @@ uint8_t tee501I2c::changeMeasurementResolution(int measResTemp) 		//8 - 14 Bit
 
 void tee501I2c::readMeasurementResolution(int &measResTemp)
 {
-  unsigned char i2cResponse[1];
-  unsigned char Command[] = {0x72,0xA7,0x0F};
+  unsigned char i2cResponse[1] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS >> 8), (TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS & 0xFF), TEE501_REGISTER_MEASUREMENT_RESOLUTION};
   wireWrite(Command, 2, false);
   wireRead(i2cResponse, 1);
   i2cResponse[0] = i2cResponse[0] << 5;
@@ -221,22 +221,22 @@ void tee501I2c::readMeasurementResolution(int &measResTemp)
 
 void tee501I2c::startPeriodicMeasurement(void)
 {
-  unsigned char Command[] = {0x20,0x1E};
+  unsigned char Command[] = {(TEE501_COMMAND_START_PERIODIC_MEASUREMENT >> 8), (TEE501_COMMAND_START_PERIODIC_MEASUREMENT & 0xFF)};
   wireWrite(Command, 1, true);
 }
 
 
 void tee501I2c::endPeriodicMeasurement(void)
 {
-  unsigned char Command[] = {0x30,0x93};
+  unsigned char Command[] = {(TEE501_COMMAND_END_PERIODIC_MEASUREMENT >> 8), (TEE501_COMMAND_END_PERIODIC_MEASUREMENT & 0xFF)};
   wireWrite(Command, 1, true);
 }
 
 
 uint8_t tee501I2c::readIdentification(unsigned char identification[])
 {
-  unsigned char i2cResponse[9];
-  unsigned char Command[] = {0x70,0x29};
+  unsigned char i2cResponse[9] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_IDENTIFICATION >> 8), (TEE501_COMMAND_READ_IDENTIFICATION & 0xFF)};
   wireWrite(Command, 1, false);
   wireRead(i2cResponse, 9);
   if(i2cResponse[8] == calcCrc8(i2cResponse, 0, 7))
@@ -256,15 +256,15 @@ uint8_t tee501I2c::readIdentification(unsigned char identification[])
 
 void tee501I2c::reset(void)
 {
-  unsigned char Command[] = {0x30,0xA2};
+  unsigned char Command[] = {(TEE501_COMMAND_SOFT_RESET >> 8), (TEE501_COMMAND_SOFT_RESET & 0xFF)};
   wireWrite(Command, 1, true);
 }
 
 
 uint8_t tee501I2c::newMeasurementReady(bool &measurement)
 {
-  unsigned char i2cResponse [3];
-  unsigned char Command[] = {0xF3,0x52};
+  unsigned char i2cResponse [3] = {};
+  unsigned char Command[] = {(TEE501_COMMAND_READ_REGISTER_2 >> 8), (TEE501_COMMAND_READ_REGISTER_2 & 0xFF)};
   wireWrite(Command, 1, false);
   wireRead(i2cResponse, 3);
   if(i2cResponse[2] == calcCrc8(i2cResponse, 0, 1))
@@ -281,7 +281,7 @@ uint8_t tee501I2c::newMeasurementReady(bool &measurement)
 
 void tee501I2c::clearStatusregister1(void)
 {
-  unsigned char Command[] = {0x30,0x41};
+  unsigned char Command[] = {(TEE501_COMMAND_CLEAR_REGISTER_1 >> 8), (TEE501_COMMAND_CLEAR_REGISTER_1 & 0xFF)};
   wireWrite(Command, 1, true);
 }
 

@@ -20,7 +20,7 @@
 
 | Step |                                                                                                                                                             |
 |------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1    | Connect the TEE501 sensor module with Arduino according to the following scheme:<br>__Please note: For this connection scheme the I2C address is 0x48.__ <br>  [<img src="images/TEE501_arduino.png" width="35%"/>](images/TEE501_arduino.png) [<img src="images/TEE501_breakoutboard_arduino.png" width="35%"/>](images/TEE501_breakoutboard_arduino.png)|
+| 1    | Connect the TEE501 sensor module with Arduino according to the following scheme:<br>__Please note: For this connection scheme the I2C address is 0x48.__ <br>  [<img src="images/TEE501_arduino.png" width="35%"/>](images/TEE501_arduino.png)[<img src="images/TEE501_breakoutboard_arduino.png" width="35%"/>](images/TEE501_breakoutboard_arduino.png)|
 | 2    | Download and install the Arduino IDE (https://www.arduino.cc/en/software). Version >1.8.7 recommended.                                                            |
 | 3    | Download the ZIP File of this project.|
 | 4    | Open the arduino software.|

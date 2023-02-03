@@ -4,7 +4,7 @@
 /*
 Read functions for measurement values of the TEE501 Sensor via I2C interface.
 
-Copyright 2022 E+E Elektronik Ges.m.b.H.
+Copyright 2023 E+E Elektronik Ges.m.b.H.
 
 Disclaimer:
 This application example is non-binding and does not claim to be complete with regard
@@ -30,8 +30,21 @@ We assume no liability for the information contained in this document.
 
 // Defines
 //-----------------------------------------------------------------------------
-#define CRC8_ONEWIRE_POLY 0x31
-#define CRC8_ONEWIRE_START 0xFF
+#define CRC8_ONEWIRE_POLY                                           0x31
+#define CRC8_ONEWIRE_START                                          0xFF
+#define TEE501_COMMAND_READ_SINGLE_SHOT                             0x2C1B
+#define TEE501_COMMAND_READ_PERIODIC_MEASUREMENT                    0xE000
+#define TEE501_COMMAND_READ_SINGLE_SHOT_WITHOUT_CLOCK_STRETCHING    0x241D
+#define TEE501_COMMAND_READ_WRITE_SENSOR_SETTINGS                   0x72A7
+#define TEE501_COMMAND_CLEAR_REGISTER_1                             0x3041
+#define TEE501_COMMAND_READ_REGISTER_1                              0xF32D
+#define TEE501_COMMAND_READ_REGISTER_2                              0xF352
+#define TEE501_COMMAND_START_PERIODIC_MEASUREMENT                   0x201E
+#define TEE501_COMMAND_END_PERIODIC_MEASUREMENT                     0x3093
+#define TEE501_COMMAND_SOFT_RESET                                   0x30A2
+#define TEE501_COMMAND_READ_IDENTIFICATION                          0x7029
+#define TEE501_REGISTER_PERIODIC_MEASUREMENT_TIME                   0x10
+#define TEE501_REGISTER_MEASUREMENT_RESOLUTION                      0x0F
 
 
 // declaration of functions
@@ -56,7 +69,7 @@ uint8_t readIdentification(unsigned char identification[]);
 uint8_t newMeasurementReady(bool &measurement);
 void clearStatusregister1(void);
 void reset(void);
-unsigned char address = 0x40;
+unsigned char address = 0x48;
 void wireWrite(unsigned char buf[],int to, bool stopmessage);
 void wireRead(unsigned char buf[], uint8_t to);
 unsigned char calcCrc8 (unsigned char buf[], unsigned char from, unsigned char to);
